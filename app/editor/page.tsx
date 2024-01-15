@@ -21,6 +21,15 @@ import Link from "next/link";
 import { ToastAction } from "@/components/ui/toast";
 import { useToast } from "@/components/ui/use-toast";
 import useFetch from "use-http";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog"
+
 const Container = ({
   className,
   ...props
@@ -49,11 +58,10 @@ export default function Component() {
 `
   );
 
+ 
   const [value, copy] = useCopyToClipboard();
 
-  const { get, response, loading, error } = useFetch(
-    `/deploy/api`
-  );
+  const { get, response, loading, error } = useFetch(`/deploy/api`);
 
   return (
     <section className="overflow-hidden rounded-[0.5rem] border bg-background shadow-md md:shadow-xl m-8 mt-24">
@@ -140,7 +148,13 @@ export default function Component() {
           <Container className="row-span-1 h-fit">
             <Button
               className="w-full rounded-xl gap-4 font-bold text-base"
-              onClick={() => copy(code)}
+              onClick={() => {copy(code)
+                toast({
+                  variant :"default",
+                  title: "Copied Success",
+                  
+                })
+               }}
             >
               <Copy />
               Copy Smart Contract
@@ -174,7 +188,7 @@ export default function Component() {
                 nunc.
               </CardContent>
               <CardFooter className="mt-4">
-                <Link href="https://studio.aepps.com/">
+                <Link href="https://studio.aepps.com/" >
                   <Button className="w-full rounded-xl gap-4 font-bold text-base">
                     <Code2 />
                     Open in IDE
@@ -220,13 +234,37 @@ export default function Component() {
             <Button
               className="w-full rounded-xl gap-4 font-bold text-base"
               onClick={async () => {
-               
-                try {
+                try{
                   const res = await get(`/?code=${encodeURIComponent(code)}`);
-                  console.log(response.json());
-                } catch (err) {
-                  console.log(err);
+                  toast({
+                    variant :"default",
+                    title: "Contract Deployed Successfully",
+                    description: `${response.json()}`,
+                  })
+                  if (!response.ok){
+                    toast({
+                      variant: "destructive",
+                      title: "Uh oh! Something went wrong.",
+                      description: `${error?.message}`,
+                     
+                    })
+                  }
+
+                
+                console.log(response);
+                
                 }
+                catch(err){
+                  console.log(error)
+                  toast({
+                    variant: "destructive",
+                    title: "Uh oh! Something went wrong.",
+                    description: "There was a problem with your request.",
+                   
+                  })
+                }
+                
+                
               }}
             >
               <Rocket />

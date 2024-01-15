@@ -56,6 +56,10 @@ export default function Component() {
 
             {/* Features */}
             <Features />
+
+            {/* <div className="text-center">
+                <p>Made with 💖 by Rudransh and Suryansh</p>
+            </div> */}
         </section>
     );
 }

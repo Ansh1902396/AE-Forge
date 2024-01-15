@@ -163,7 +163,7 @@ export async function GET(request: Request) {
     console.log(`Obtained bytecode ${bytecode}`);
 
     //@ts-ignore
-    const deployInfo = await contract.$deploy([2]);
+    const deployInfo = await contract.$deploy([1]);
     console.log(`Contract deployed at ${deployInfo.address}`);
 
     return Response.json({ address: deployInfo.address });
