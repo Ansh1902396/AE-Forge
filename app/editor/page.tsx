@@ -10,9 +10,15 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { Code2, Copy, Rocket, Wand2Icon } from "lucide-react";
+import { redirect } from "next/dist/server/api-utils";
 import Prism, { highlight } from "prismjs";
 import { SetStateAction, useEffect, useState } from "react";
 import Editor from "react-simple-code-editor";
+
+import { useCopyToClipboard } from 'usehooks-ts'
+import { string } from "zod";
+import Link from 'next/link'
+
 
 const Container = ({
     className,
@@ -40,6 +46,8 @@ export default function Component() {
   entrypoint multiplyBy(x : int) = x * state.factor
 `
     );
+
+  const [value, copy] = useCopyToClipboard()
 
     return (
         <section className="overflow-hidden rounded-[0.5rem] border bg-background shadow-md md:shadow-xl m-8 mt-24">
@@ -136,7 +144,7 @@ export default function Component() {
                         </Card>
                     </Container>
                     <Container className="row-span-1 h-fit">
-                        <Button className="w-full rounded-xl gap-4 font-bold text-base">
+                        <Button className="w-full rounded-xl gap-4 font-bold text-base" onClick={() => copy(code)}>
                             <Copy />
                             Copy Smart Contract
                         </Button>
@@ -172,10 +180,13 @@ export default function Component() {
                                 fringilla nunc, ac aliquet nunc nunc id nunc.
                             </CardContent>
                             <CardFooter className="mt-4">
+                                <Link  href="https://studio.aepps.com/">
                                 <Button className="w-full rounded-xl gap-4 font-bold text-base">
                                     <Code2 />
                                     Open in IDE
                                 </Button>
+                                </Link>
+                              
                             </CardFooter>
                         </Card>
                     </Container>
