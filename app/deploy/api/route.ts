@@ -158,6 +158,11 @@ export async function GET(request: Request) {
     const contract = await aeSdk.initializeContract({
         sourceCode: code || cd,
     });
+    let txParams = {
+      interval: 500,
+      blocks: 3,
+      allowUnsynced: true,
+    }
 
     const bytecode = await contract.$compile();
     console.log(`Obtained bytecode ${bytecode}`);
