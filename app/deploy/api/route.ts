@@ -1,5 +1,6 @@
 import { AeSdk, CompilerHttp, Node, MemoryAccount } from "@aeternity/aepp-sdk";
 
+import { NextResponse } from 'next/server'
 const ACCOUNT_SECRET_KEY =
     "9ebd7beda0c79af72a42ece3821a56eff16359b6df376cf049aee995565f022f840c974b97164776454ba119d84edc4d6058a8dec92b6edc578ab2d30b4c4200";
 const NODE_URL = "https://testnet.aeternity.io";
@@ -12,6 +13,8 @@ const aeSdk = new AeSdk({
     accounts: [account],
     onCompiler: new CompilerHttp(COMPILER_URL),
 });
+
+
 
 const cd = `@compiler >= 6
 
@@ -168,8 +171,8 @@ export async function GET(request: Request) {
     console.log(`Obtained bytecode ${bytecode}`);
 
     //@ts-ignore
-    const deployInfo = await contract.$deploy([1]);
+    const deployInfo = await contract.$deploy([0]);
     console.log(`Contract deployed at ${deployInfo.address}`);
 
-    return Response.json({ address: deployInfo.address });
+    return NextResponse.json({ address: deployInfo.address });
 }

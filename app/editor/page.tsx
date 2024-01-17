@@ -119,10 +119,10 @@ export default function Component() {
             <Button className="w-full rounded-xl gap-4 font-bold text-base" onClick={async() => {
                 try{
                   const res = await get('/generate/api')
-                  const data = await res.json()
+                  const data = await JSON.stringify(res)
                   console.log(data)
-                  if(res.ok){
-                  setPrompt(data)
+                  if(res){
+                  setCode(data)
                   }
                 }
                 catch(err) {
