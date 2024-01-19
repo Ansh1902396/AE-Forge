@@ -3,6 +3,7 @@ const nextConfig = {
     experimental: {
         esmExternals: "loose",
     },
+    reactStrictMode: false,
     webpack: (config) => {
         // config.externals = {
         //     ...config.externals,

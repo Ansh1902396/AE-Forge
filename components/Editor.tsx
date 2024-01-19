@@ -1,32 +1,23 @@
 import {
     Form,
     FormControl,
-    FormDescription,
     FormField,
-    FormItem,
-    FormLabel,
-    FormMessage,
+    FormItem
 } from "@/components/ui/form";
 
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardFooter,
-    CardHeader,
-    CardTitle,
+    Card
 } from "@/components/ui/card";
 
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
 
-import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "@/components/ui/use-toast";
-import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { AeSdk, CompilerHttp, Node, MemoryAccount } from "@aeternity/aepp-sdk";
+import { AeSdk, CompilerHttp, MemoryAccount, Node } from "@aeternity/aepp-sdk";
 
 const CONTRACT_SOURCE_CODE = `
 contract Multiplier =
