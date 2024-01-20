@@ -1,4 +1,5 @@
 "use client";
+import DeployDialog from "@/components/DeployDialog";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -24,7 +25,6 @@ import "prismjs/components/prism-javascript";
 import "prismjs/themes/prism.css";
 import { useEffect, useState } from "react";
 import Editor from "react-simple-code-editor";
-import useFetch from "use-http";
 import { useCopyToClipboard } from "usehooks-ts";
 
 const Container = ({
@@ -79,7 +79,6 @@ languages.sophia = sophia;
 export default function Component() {
     const { toast } = useToast();
     const [_, copy] = useCopyToClipboard();
-    const { get, response, loading, error } = useFetch(`/generate/api`);
 
     const searchParams = useSearchParams();
     const ideaKey = searchParams.get("idea") || "";
@@ -109,23 +108,22 @@ export default function Component() {
         fError,
     } = useFeature(featureData.changes, featureData.originalCode);
 
-    const [idea, setIdea] = useState<String>("");
-    const { code, gLoading, gError } = useGenCode(idea);
+    // const [idea, setIdea] = useState<String>("");
+    const { code, gLoading, gError } = useGenCode(ideaKey);
 
     const [summCode, setSummCode] = useState<String>("");
     const { summary, sLoading, sError } = useSummary(summCode);
+    // useEffect(() => {
+    //     setIdea(ideaKey);
+    // }, [ideaKey]);
 
     useEffect(() => {
-        // setIdea(ideaKey);
-    }, []);
-
-    useEffect(() => {
-        if (codeHook !== "") {
-            setData({ ...data, code: codeHook });
-        }
-
         if (code !== "") {
             setData({ ...data, code: code });
+        }
+
+        if (codeHook !== "") {
+            setData({ ...data, code: codeHook });
         }
 
         if (summary !== "") {
@@ -134,14 +132,14 @@ export default function Component() {
     }, [codeHook, code, summary]);
 
     useEffect(() => {
-        if (fError || error || gError || sError) {
+        if (fError || gError || sError) {
             toast({
                 variant: "destructive",
                 title: "Uh oh! Something went wrong.",
                 description: `${fError?.message}`,
             });
         }
-    }, [fError, error, gError]);
+    }, [fError, gError]);
 
     useEffect(() => {
         if (gLoading || fLoading || sLoading) {
@@ -205,7 +203,6 @@ export default function Component() {
                                         originalCode: data.code,
                                     });
                                 } catch (err) {
-                                    console.log(error);
                                     toast({
                                         variant: "destructive",
                                         title: "Uh oh! Something went wrong.",
@@ -257,7 +254,7 @@ export default function Component() {
                         <Button
                             className="w-full rounded-xl gap-4 font-bold text-base"
                             onClick={() => {
-                                copy(data.code);
+                                copy(data.code as string);
                                 toast({
                                     variant: "default",
                                     title: "Copied Success",
@@ -324,14 +321,13 @@ export default function Component() {
                                                         "First you need a smart contract to summarize."
                                                     );
                                                 }
-                                            } catch (err: Error) {
-                                                console.log(error);
+                                            } catch (err: unknown) {
                                                 toast({
                                                     variant: "destructive",
                                                     title: "Uh oh! Something went wrong.",
                                                     description:
                                                         "There was a problem with your request.\n" +
-                                                        err.message,
+                                                        (err as Error).message,
                                                 });
                                             }
                                         }}>
@@ -348,41 +344,7 @@ export default function Component() {
                         </Card>
                     </Container>
                     <Container className="row-span-1 h-fit">
-                        <Button
-                            className="w-full rounded-xl gap-4 font-bold text-base"
-                            onClick={async () => {
-                                try {
-                                    const response = await get(
-                                        `/generate/api?code=${data.code}`
-                                    );
-                                    toast({
-                                        variant: "default",
-                                        title: "Contract Deployed Successfully",
-                                        description: `${response.json()}`,
-                                    });
-                                    if (!response.ok) {
-                                        toast({
-                                            variant: "destructive",
-                                            title: "Uh oh! Something went wrong.",
-                                            description: `${error?.message}`,
-                                        });
-                                    }
-
-                                    console.log(response);
-                                } catch (err) {
-                                    console.log(error);
-                                    toast({
-                                        variant: "destructive",
-                                        title: "Uh oh! Something went wrong.",
-                                        description:
-                                            "There was a problem with your request.",
-                                    });
-                                }
-                            }}>
-                            {/* {`${loading?<Rocket/>:<Rocket/>}`} */}
-                            <Rocket />
-                            {`${loading ? "Deploying..." : "1-Click Deploy"}`}
-                        </Button>
+                        <DeployDialog code={data.code} />
                     </Container>
                 </div>
             </div>

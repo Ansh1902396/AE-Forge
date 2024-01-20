@@ -339,8 +339,7 @@ contract NumberStorage =
     state.storedNumber
 "
 
-Sample Output  : "
-	NumberStorage is a smart contract that stores a number and allows the owner to retrieve it. The owner can also change the number. The owner can be anyone, but only the owner can change the number. The owner can also retrieve the number.
+Sample Output  : "NumberStorage is a smart contract that stores a number and allows the owner to retrieve it. The owner can also change the number. The owner can be anyone, but only the owner can change the number. The owner can also retrieve the number.
 "
 
 Contract  : {code}
@@ -352,4 +351,33 @@ const summaryPrompt = new PromptTemplate({
     template: summaryPromptTemplate,
 });
 
-export { initPrompt, featurePrompt, summaryPrompt };
+const deployPrompt = `You are the lead smart contract engineer for a company which uses sophia as it's primary language for writing smart contracts on aeternity blockchain, your job is to give the sample initial values for the argument array of a sophia smart contract, you need to give the values for the argument array provided to you so that they can be deployed, only give the values and no explanation is required. Give real-world values that can be actually used in deployment. Here are a few example for the input-output, try to follow this structure and give only the output for the last problem.
+
+sample init function argument array  : [f: int]
+sample init function argument values  : [10]
+
+
+sample init function argument array  : [initial_balance: int, name: string]
+sample init function argument values  : [100, "Simple Token"]
+
+
+sample init function argument array  : []
+sample init function argument values  : []
+
+
+sample init function argument array  : [buyer_address: address, price: int]
+sample init function argument values  : ["ak_XsSLpN161dHo77k82CZHDnUCDpVG1JSujZjbGYhNKTgMy5exZ", 100]
+
+
+init function argument array  : [city: string]
+init function argument values  : ["New York"]
+
+init function argument array  : {arguments}
+init function argument values  : `;
+
+const deployPromptTemplate = new PromptTemplate({
+    inputVariables: ["arguments"],
+    template: deployPrompt,
+});
+
+export { initPrompt, featurePrompt, summaryPrompt, deployPromptTemplate };
