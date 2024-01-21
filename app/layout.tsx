@@ -20,6 +20,7 @@ export default function RootLayout({
 }) {
     return (
         <html lang="en">
+            <title>ÆForge</title>
             <Script src="https://unpkg.com/@aeternity/aepp-sdk/dist/aepp-sdk.browser-script.js" />
             <body className={inter.className}>
                 <Navbar />
