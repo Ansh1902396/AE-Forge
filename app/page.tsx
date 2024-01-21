@@ -10,7 +10,7 @@ export default function Component() {
     const router = useRouter();
 
     return (
-        <section className="w-full flex flex-col py-12 md:py-24 lg:py-32 xl:py-48 bg-black">
+        <section className="w-full flex flex-col pt-12 md:pt-24 lg:pt-32 xl:pt-48 bg-black mb-8">
             <div className="px-4 pt-32 h-[60vh] md:px-6">
                 <div className="grid gap-6 items-center">
                     <div className="flex flex-col justify-center space-y-4 text-center">
@@ -68,9 +68,9 @@ export default function Component() {
             {/* Features */}
             <Features />
 
-            {/* <div className="text-center">
+            <div className="text-center">
                 <p>Made with 💖 by Rudransh and Suryansh</p>
-            </div> */}
+            </div>
         </section>
     );
 }
