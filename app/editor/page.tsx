@@ -16,7 +16,8 @@ import useFeature from "@/utils/hooks/useFeature";
 import useGenCode from "@/utils/hooks/useGenCode";
 import useSummary from "@/utils/hooks/useSummary";
 import sophia from "@/utils/sophia";
-import { Code2, Copy, Rocket, Wand2Icon } from "lucide-react";
+import { AeSdk, CompilerHttp, MemoryAccount, Node } from "@aeternity/aepp-sdk";
+import { Code2, Copy, Wand2Icon } from "lucide-react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { highlight, languages } from "prismjs";
@@ -42,6 +43,18 @@ const Container = ({
     );
 };
 
+const ACCOUNT_SECRET_KEY =
+    "9ebd7beda0c79af72a42ece3821a56eff16359b6df376cf049aee995565f022f840c974b97164776454ba119d84edc4d6058a8dec92b6edc578ab2d30b4c4200";
+const NODE_URL = "https://testnet.aeternity.io";
+const COMPILER_URL = "https://v7.compiler.aepps.com";
+
+const account = new MemoryAccount(ACCOUNT_SECRET_KEY);
+const node = new Node(NODE_URL);
+const aeSdk = new AeSdk({
+    nodes: [{ name: "testnet", instance: node }],
+    accounts: [account],
+    onCompiler: new CompilerHttp(COMPILER_URL),
+});
 const eg_code: String = `// define compatible compiler versions
 @compiler >= 6
 
@@ -113,6 +126,7 @@ export default function Component() {
 
     const [summCode, setSummCode] = useState<String>("");
     const { summary, sLoading, sError } = useSummary(summCode);
+    const [contractErr, setContractErr] = useState<String>("");
     // useEffect(() => {
     //     setIdea(ideaKey);
     // }, [ideaKey]);
@@ -149,6 +163,27 @@ export default function Component() {
             });
         }
     }, [gLoading, fLoading, sLoading]);
+
+    useEffect(() => {
+        if (data.code !== startingMessage) {
+            (async function () {
+                try {
+                    const contract = await aeSdk.initializeContract({
+                        sourceCode: data.code as string,
+                    });
+                    setContractErr("");
+                } catch (err) {
+                    toast({
+                        variant: "destructive",
+                        title: "Uh oh! Something went wrong.",
+                        description:
+                            "Contract Error: " + (err as Error).message,
+                    });
+                    setContractErr((err as Error).message);
+                }
+            })();
+        }
+    }, [data.code]);
 
     return (
         <section className="overflow-hidden rounded-xl border bg-background shadow-md md:shadow-xl m-6 mt-24">
@@ -344,7 +379,10 @@ export default function Component() {
                         </Card>
                     </Container>
                     <Container className="row-span-1 h-fit">
-                        <DeployDialog code={data.code} />
+                        <DeployDialog
+                            code={data.code}
+                            contractErr={contractErr}
+                        />
                     </Container>
                 </div>
             </div>
