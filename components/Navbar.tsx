@@ -1,5 +1,5 @@
 // @ts-nocheck
-"use client"
+"use client";
 import { Github } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
@@ -39,24 +39,21 @@ const Navbar = () => {
     return (
         <div
             className={`fixed top-0 w-full z-30 transition-all bg-white/0`}
-            ref={nav}
-        >
+            ref={nav}>
             <div className="mx-5 flex h-16 max-w-screen-xl items-center justify-between xl:mx-auto">
                 <Link
                     href="/"
                     className={clsx(
                         "flex items-center font-display text-3xl font-bold",
                         lexend.className
-                    )}
-                >
+                    )}>
                     <h1>ÆForge</h1>
                 </Link>
                 <div className="flex items-center space-x-4">
                     <a
-                        href="https://github.com/Suryansh-23/amrit"
+                        href="https://github.com/Ansh1902396/AE-Forge"
                         target="_blank"
-                        rel="noopener noreferrer"
-                    >
+                        rel="noopener noreferrer">
                         <Github />
                     </a>
                 </div>

@@ -1,20 +1,17 @@
-/**
- * v0 by Vercel.
- * @see https://v0.dev/t/xO5AOI3
- */
+"use client";
 import { Button } from "@/components/ui/button";
-
+import { Input } from "@/components/ui/input";
+import { useRouter } from "next/navigation";
+import { useState } from "react";
 import Features from "../components/Features";
 
-interface InputProps {
-    value: string;
-    onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
-
 export default function Component() {
+    const [idea, setIdea] = useState<String>("");
+    const router = useRouter();
+
     return (
-        <section className="w-full py-12 md:py-24 lg:py-32 xl:py-48 bg-black">
-            <div className="container px-4 md:px-6">
+        <section className="w-full flex flex-col pt-12 md:pt-24 lg:pt-32 xl:pt-48 bg-black mb-8">
+            <div className="px-4 pt-32 h-[60vh] md:px-6">
                 <div className="grid gap-6 items-center">
                     <div className="flex flex-col justify-center space-y-4 text-center">
                         <div className="space-y-2">
@@ -22,31 +19,45 @@ export default function Component() {
                                 Unleash Aeternity&apos;s Contract Magic!
                             </h1>
                             <p className="max-w-[600px] text-zinc-200 md:text-xl dark:text-zinc-100 mx-auto">
-                                Forge Aeternity&apos;s magic in smart contracts
-                                – innovate, deploy seamlessly into the
+                                {/* Forge Aeternity&apos;s magic in smart contracts
+                                - innovate, deploy seamlessly into the
                                 blockchain landscape.
+                                <br /> */}
+                                We know you don&apos;t know Sophia, well neither
+                                do we, but we&apos;ll help you get started.
                             </p>
                         </div>
-                        <div className="w-full max-w-sm space-y-2 mx-auto flex flex-row space-x-3 ">
-                            <form className="bg-black rounded-xl shadow-lg h-fit flex flex-row px-1 items-center w-full border border-white mt-2">
-                                <input
-                                    type="text"
-                                    name="prompt"
-                                    placeholder="cat"
-                                    className="bg-transparent text-white placeholder:text-gray-400 ring-0 outline-none resize-none py-2.5 px-2 font-mono text-sm h-10 w-full transition-all duration-300"
-                                />
-                                {/* <input
+                        <div className="w-full max-w-sm gap-y-2 mx-auto flex flex-row gap-x-4 text-base">
+                            {/* <input
+                                type="text"
+                                name="prompt"
+                                placeholder="Your Amazing Blockchain Idea"
+                                className="bg-transparent text-white placeholder:text-gray-400 ring-0 outline-none resize-none py-2.5 px-2 font-mono text-sm h-10 w-full transition-all duration-300"
+                            /> */}
+                            <Input
+                                name="prompt"
+                                placeholder="Your Amazing Smart Contract Idea"
+                                className="rounded-xl"
+                                value={idea as string}
+                                onChange={(e) => setIdea(e.target.value)}
+                            />
+                            {/* <input
                                     type="text"
                                     name="prompt"
                                     placeholder="Enter a value"
                                     title="Input field"
                                     className="bg-transparent text-white placeholder:text-gray-400 ring-0 outline-none resize-none py-2.5 px-2 font-mono text-sm h-10 w-full transition-all duration-300"
                                 /> */}
-                            </form>
-
                             <Button
-                                className="bg-white text-black rounded-md"
-                                type="submit">
+                                className="bg-white text-black py-0 rounded-xl"
+                                type="submit"
+                                onClick={() => {
+                                    router.push(
+                                        `/editor?idea=${encodeURI(
+                                            idea as string
+                                        )}`
+                                    );
+                                }}>
                                 Shoot
                             </Button>
                         </div>
@@ -57,9 +68,9 @@ export default function Component() {
             {/* Features */}
             <Features />
 
-            {/* <div className="text-center">
+            <div className="text-center">
                 <p>Made with 💖 by Rudransh and Suryansh</p>
-            </div> */}
+            </div>
         </section>
     );
 }
